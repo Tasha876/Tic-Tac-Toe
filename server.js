@@ -4,7 +4,7 @@ const { url } = require('inspector');
 const { URL } = require('url');
 
 const hostname = 'localhost';
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const type = {
     'html': 'text/html',
