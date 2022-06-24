@@ -1,0 +1,357 @@
+:root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    --x-color: hsl(159, 64%, 87%);
+    --o-color: hsl(197, 61%, 91%);
+    --x-color-faded: hsl(159, 64%, 93%);
+    --o-color-faded: hsl(197, 61%, 95%);
+    --num-color: hsla(0, 0%, 0%, 0.3);
+    --status-color: black;
+    --bg-color: unset;
+    --score-bg-color: #333;
+    --score-color: whitesmoke;
+    --board-color: black;
+    --no-win-color: white;
+    --play-bg-color: rgba(250, 234, 214, 0.6);
+    --play-bg-color-active: rgb(143, 125, 102);
+    --play-color-active: white;
+    --play-color-shadow: #ffffff;
+    --play-border-color-1: rgba(187, 168, 145, 0.9);
+    --play-border-color-2: rgba(236, 228, 217, 0.9);
+    --win-line-color: hsla(181, 57%, 64%, 0.471);
+    --player-text-color: black;
+    --switch-color: #333;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #333;
+        --x-color: hsl(170, 61%, 27%);
+        --o-color: hsl(203, 98%, 31%);
+        --x-color-faded: hsl(170, 51%, 7%);
+        --o-color-faded: hsl(203, 88%, 11%);
+        --player-text-color: lightgrey;
+        --no-win-color: #555;
+        --score-bg-color: black;
+        --score-color: grey;
+        --status-color: lightgrey;
+        --board-color: grey;
+        --num-color: hsla(0, 0%, 100%,0.3);
+        --switch-color: white;
+        --play-bg-color: hsla(164, 52%, 55%, 0.6);
+        --play-bg-color-active: hsla(164, 52%, 20%,0.9);
+        --play-color-active: white;
+        --play-color-shadow: #ffffff88;
+        --play-border-color-1: hsla(164, 52%, 75%,0.9);
+        --play-border-color-2: hsla(164, 52%, 30%,0.9);
+        --win-line-color: hsla(180, 100%, 13%,0.471);
+    } 
+}
+
+body {
+    transition: background-color 0.2s ease-in;
+
+    font-family: 'Andale Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+}
+
+[color-scheme="light"] {
+    --x-color: hsl(159, 64%, 87%);
+    --o-color: hsl(197, 61%, 91%);
+    --x-color-faded: hsl(159, 64%, 93%);
+    --o-color-faded: hsl(197, 61%, 95%);
+    --num-color: hsla(0, 0%, 0%, 0.3);
+    --status-color: black;
+    --bg-color: unset;
+    --score-bg-color: #333;
+    --score-color: whitesmoke;
+    --board-color: black;
+    --no-win-color: white;
+    --play-bg-color: rgba(250, 234, 214, 0.6);
+    --play-bg-color-active: rgb(143, 125, 102);
+    --play-color-active: white;
+    --play-color-shadow: white;
+    --play-border-color-1: rgba(187, 168, 145, 0.9);
+    --play-border-color-2: rgba(236, 228, 217, 0.9);
+    --win-line-color: #70d6d878;
+    --player-text-color: black;
+    --switch-color: #333;
+    --text-color: black;
+    --highlight-color: hsl(164, 52%, 30%);
+}
+
+[color-scheme="dark"] {
+    --bg-color: #333;
+    --x-color: hsl(170, 61%, 27%);
+    --o-color: hsl(203, 98%, 31%);
+    --x-color-faded: hsl(170, 51%, 7%);
+    --o-color-faded: hsl(203, 88%, 11%);
+    --player-text-color: lightgrey;
+    --no-win-color: #555;
+    --score-bg-color: black;
+    --score-color: grey;
+    --status-color: lightgrey;
+    --board-color: grey;
+    --num-color: hsla(0, 0%, 100%,0.3);
+    --switch-color: white;
+    --text-color: lightgrey;
+    --highlight-color: hsl(164, 52%, 55%);
+    --play-bg-color: hsla(164, 52%, 55%, 0.6);
+    --play-bg-color-active: hsla(164, 52%, 20%,0.9);
+    --play-color-shadow: #ffffff88;
+    --play-color-active: white;
+    --play-border-color-1: hsla(164, 52%, 75%,0.9);
+    --play-border-color-2: hsla(164, 52%, 30%,0.9);
+    --win-line-color: hsla(180, 100%, 13%,0.471);
+}
+
+#status {
+    color: var(--status-color);
+    margin-top: 0;
+}
+
+.container {
+    position: relative;
+    height: 70vmin;
+    width: 70vmin;
+    margin-bottom: auto;
+    text-align: center;
+}
+
+.splash {
+    margin: auto;
+    text-align: center;
+    padding-bottom: 4em;
+}
+
+.splash h1 {
+    color: var(--status-color);
+}
+
+.splash a {
+    color: var(--text-color)
+}
+
+.splash a:hover {
+    color: var(--highlight-color)
+}
+
+#board {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 1px solid var(--board-color);
+    position: relative;
+}
+
+.loading {
+    color: var(--text-color);
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 3;
+    margin: auto;
+    inset: 0;
+}
+
+#board div {
+    transition: all 0.2s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    counter-increment: squareNumber;
+    position: relative;
+    color: var(--player-text-color)
+}
+
+#board div:nth-child(n+4){
+    border-top: 1px solid var(--board-color);
+}
+
+#board div:not(:nth-child(3n)) {
+    border-right: 1px solid var(--board-color);
+}
+
+#board div:after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    content: counter(squareNumber);
+    color: var(--num-color);
+    font-size: 0.6em;
+    margin-inline: 1.5px;
+}
+
+@keyframes jump-in {
+    0% {
+        opacity: 0;
+        transform: scale(2);
+    }
+    95% {
+        opacity: 1;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#play.animate {
+    display: block;
+    opacity: 0;
+    animation: jump-in 0.5s ease-out 0.5s 1 forwards;
+}
+
+#play {
+    all: unset;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    display: none;
+    position: absolute;
+    text-align: center;
+    border: 0 solid transparent;
+    border-color: var(--play-border-color-1) var(--play-border-color-1) var(--play-border-color-1) var(--play-border-color-1);
+    inset: 25%;
+    margin: auto;
+    width: 50%;
+    height: 50%;
+    background-color: var(--play-bg-color);
+    font-size: 1.5em;
+    line-height: 2;
+    text-shadow: 
+        1px 1px var(--play-color-shadow),
+        1px -1px var(--play-color-shadow),
+        -1px 1px var(--play-color-shadow),
+        -1px -1px var(--play-color-shadow);
+    -webkit-font-smoothing: antialiased;
+}
+
+#play:hover {
+    border: 0.5em solid;
+    border-color: var(--play-border-color-1) var(--play-border-color-1) var(--play-border-color-2) var(--play-border-color-2);
+}
+
+#play:active {
+    text-shadow: none;
+    border: 1em solid;
+    background-color: var(--play-bg-color-active);
+    border-color: var(--play-border-color-2) var(--play-border-color-2)  var(--play-border-color-1) var(--play-border-color-1);
+    color: var(--play-color-active);
+}
+
+.selected.X, #board div.X:not(.selected):hover {
+    background-color: var(--x-color);
+}
+
+.selected.O, #board div.O:not(.selected):hover {
+    background-color: var(--o-color);
+}
+
+#board.finishedBoard :not(.winSquare) {
+    color: var(--no-win-color);
+}
+
+#board.finishedBoard :not(.winSquare).X {
+    background-color: var(--x-color-faded);
+}
+
+.finishedBoard :not(.winSquare).O {
+    background-color: var(--o-color-faded);
+}
+
+.line {
+    position: absolute;
+    transition: height 0.5s ease-in;
+    margin: auto;
+    height: 1px;
+    border: none;
+    border-left: 5px solid var(--win-line-color);
+    transform-origin: 0 0;
+    transform: scaleY(1.25) translateY(-10%)
+}
+
+header {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.score {
+    margin-right: auto;
+    min-width: 5.5ch;
+    padding: 0.5rem;
+    background-color: var(--score-bg-color);
+    color: var(--score-color);
+    border-radius: 0 0 1rem 0;
+}
+
+label.switch {
+    position: relative;
+    height: 1.5em;
+    width: 3em;
+    margin: 0.5em 0.5em auto auto;
+    background-color: var(--switch-color);
+    border-radius: 0.75em;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+span.slider {
+    opacity: 1;
+    transition: all 0.2s linear;
+    position: absolute;
+    top: 0.2em;
+    bottom: 0.2em;
+    left: 0.2em;
+    width: 1.3em;
+    background-color: white;
+    border-radius: 0.63em;
+    display: flex;
+}
+
+i {
+    font-style: normal;
+}
+
+input + i::before {
+    position: absolute;
+    content: '\23FE';
+    transform: scale(-1, 1);
+    color: white;
+    line-height: 1;
+    font-size: 1.45em;
+    right: 0.125em;
+    margin-block: auto;
+}
+
+input:checked + i::before {
+    position: absolute;
+    content: '\2600';
+    font-size: 1.6em;
+    color: black;
+    line-height: 1;
+    left: 0.125em;
+    right: auto;
+    margin-block: auto;
+}
+
+input:checked ~ span.slider {
+    left: 1.5em;
+    background-color: black;
+}

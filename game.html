@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" sizes="16x16 32x32 48x48" href="rect833-16x16.png">
+    <link rel="icon" sizes="512x512" href="rect833-16x16.png">
+    <title>Tic-Tac-Toe</title>
+</head>
+<script src="./modules/set-scheme.js"></script>
+<body>
+    <header>
+        <label class="switch">
+            <input type="checkbox" class="theme">
+            <i> </i>
+            <span class="slider">&nbsp;</span>
+        </label>
+        <div class="score">X:<span class="x-score">000</span><br/>O:<span class="o-score">000</span></div>
+    </header>
+    <h1 id="status"></h1>
+    <div class="container">
+        <div id="board">
+            <span class="loading">loading</span>
+        </div>
+        <button id="play">Play<br/>again?</button>
+    </div>
+</body>
+<script type="module" src="./modules/game.js"></script>
+<script type="module" src="./modules/color-scheme.js"></script>
+
+</html>
