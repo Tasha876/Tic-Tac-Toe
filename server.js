@@ -18,7 +18,7 @@ const type = {
 const server = http.createServer((req, res) => {
 
     const urlString = req.url
-    const reqURL = new URL('https://localhost:3000' + urlString)
+    const reqURL = new URL(`https://localhost:${port}` + urlString)
     const path = reqURL.pathname
 
     const pass = path.match(/(?<=\.)html|css|js|png|json|webmanifest$/)
