@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
     const reqURL = new URL(`https://localhost:${port}` + urlString)
     const path = reqURL.pathname
 
-    const pass = path.match(/(?<=\.)html|css|js|png|json|webmanifest$/)
+    const pass = path.match(/(?<=\.)html|css|js|png|json|ico$/)
 
     if (!fs.existsSync(__dirname + path) && !fs.existsSync(__dirname + path + '.html')) {
         res.statusCode = 404
