@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const { URL } = require('url');
 
-const hostname = 'localhost';
+const hostname = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 8080;
 
 const type = {
@@ -17,7 +17,7 @@ const type = {
 const server = http.createServer((req, res) => {
 
     const urlString = req.url
-    const reqURL = new URL(`https://localhost:${port}` + urlString)
+    const reqURL = new URL(`https://${hostname}:${port}` + urlString)
     const path = reqURL.pathname
 
     const pass = path.match(/(?<=\.)html|css|js|png|json|ico$/)
