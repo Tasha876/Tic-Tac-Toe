@@ -325,33 +325,34 @@ span.slider {
     display: flex;
 }
 
-i {
-    font-style: normal;
-}
-
-input + i::before {
-    position: absolute;
-    content: '\23FE';
-    transform: scale(-1, 1);
-    color: white;
-    line-height: 1;
-    font-size: 1.45em;
-    right: 0.125em;
-    margin-block: auto;
-}
-
-input:checked + i::before {
-    position: absolute;
-    content: '\2600';
-    font-size: 1.6em;
-    color: black;
-    line-height: 1;
+#sun {
+    fill: #181818;
     left: 0.125em;
-    right: auto;
-    margin-block: auto;
+    width: 1.25em;
+
+}
+
+#moon {
+    fill: white;
+    right: 0.25em;
+    width: 1em;
+}
+
+#sun, #moon {
+    inset-block: 0;
+    height: 100%;
+}
+
+input ~ svg {
+    position: absolute;
+    height: auto;
+}
+
+input:checked ~ #moon, input:not(:checked) ~ #sun {
+    display: none;
 }
 
 input:checked ~ span.slider {
     left: 1.5em;
-    background-color: black;
+    background-color: #181818;
 }
