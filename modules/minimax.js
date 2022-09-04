@@ -1,4 +1,5 @@
 const getScore = (board, depth) => {
+    // console.log(depth)
     if (testForWin(board.xState) === null && testForWin(board.oState) === null) return null
     board.gameOver = true
     if (testForWin(board.xState)) return  1 + depth
@@ -6,9 +7,9 @@ const getScore = (board, depth) => {
     return 0
 }
 
-const minimax = (board, isMaximizingPlayer = true, depth = 9, alpha = -Infinity, beta = Infinity) => {
+const minimax = (board, isMaximizingPlayer = true, depth = 8, alpha = -Infinity, beta = Infinity) => {
 
-    const score = getScore(board, depth, isMaximizingPlayer)
+    const score = getScore(board, depth)
 
     if (board.gameOver || !depth) {
         return score
@@ -23,11 +24,28 @@ const minimax = (board, isMaximizingPlayer = true, depth = 9, alpha = -Infinity,
 
             if (computer[i] || human[i]) continue
 
+            // made temp game, so it doesn't mess with the actual one
             const tempBoard = {xState: [...computer.slice(0,i),1,...computer.slice(i+1)], oState: human}
             let curr = minimax(tempBoard, false, depth - 1, alpha, beta)
 
             max = Math.max(curr, max)
 
+            // disregards irrelevant branches
+            // overexplained for only my benefit
+            // i.e. if the max of the mins is less than or equal to the min if the maxs, break out of loop
+            // e.g. if isMaximizingPlayer === true and the previous maximizing level looked like this:
+            //          [   1    1    1   ] [   -1    0    0   ] [   -1   0    0   ]
+
+            // instead of evaluating all of the tree like this:
+            //                                    [   1   ]
+            //               [   1                   -1                 -1   ]
+            //          [   1    1    1   ] [   -1    0    0   ] [   -1   0    0   ]
+            // it would be 'pruned' to:
+            //                                    [   1   ]  
+            //               [   1                  <= -1             <= -1  ]
+            //          [   1    1    1   ] [   -1    ?    ?   ] [   -1   ?    ?   ] 
+            // because we'd know at the prior level, there was a point where "O" could NOT avoid defeat (i.e. the minimum score was equal to the max score)
+            // "X" would have definitely picked this move, so there's no point in evaluating the others
             alpha = Math.max(alpha,curr)
             if (beta <= alpha) break
         }
@@ -87,24 +105,38 @@ const testForWin = (b) => {
 }
 
 const levels = {
-    hard: 9,
+    hard: 8,
     medium: 4,
-    easy: 0, 
+    easy: 1, 
 }
 
+// keeps track of first pass through, so it can skip minimax that one time (it was slow)
+
 const bestMove = (game, level = 'hard') => {
+
+    // if there are no Os on the board its the first time the computer is playing
+    let firstPass = game.oState.every(entry=>!entry)
 
     if (game.gameOver) return
 
     const curr = [...game.xState]
     const opp = [...game.oState]
 
-    let nextMove = null
+    // list of best first moves,
+    // speeds up the process a lot
+    // array will hold list of next best moves, so that the game is a little bit more "fun" and random
+    let nextMoves = [0,2,6,8]
+
     let bestScore = -Infinity
 
     let closeLoses = 0
 
     for (let i = 0; i < 9; i++) {
+    
+        // makes it so the computer does not do stupid things on first pass (i.e. go in a random spot because it figures that every move ends in a draw)
+        // also speeds up first move a bunch; took a while just to go in the first square before
+        if (firstPass) break
+
         if (curr[i] || opp[i]) continue
 
         // added so the computer plays more like a human 
@@ -114,12 +146,20 @@ const bestMove = (game, level = 'hard') => {
 
         let score = minimax({xState: [...curr.slice(0,i),1, ...curr.slice(i + 1)], oState: opp}, false, levels[level]) + closeLoses
 
+
         if (score > bestScore) {
             bestScore = score
-            nextMove = i
+            nextMoves = [i]
         }
+        else if (score === bestScore) {
+            nextMoves.push(i)
+        }
+
     }
-    return nextMove
+    firstPass = false
+
+    // picks a random (but equal) move
+    return nextMoves[Math.floor(Math.random() * nextMoves.length)]
 }
 
 export {
