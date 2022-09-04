@@ -54,6 +54,8 @@ const startGame = () => {
     isXFirst = !isXFirst
     let isX = isXFirst
 
+    board.isClickable = !isX
+
     status.textContent = (isX ? 'X\'s' : 'O\'s') + ' turn'
 
     const fragment = document.createDocumentFragment()
@@ -64,7 +66,7 @@ const startGame = () => {
     }
 
     board.onclick = (e) => {
-        if (e.currentTarget === e.target) return
+        if (e.currentTarget === e.target || !board.isClickable) return
 
         const squareDiv = e.target
         const index = squareDiv.getAttribute('data-index')
@@ -81,6 +83,7 @@ const startGame = () => {
         b.changeState(index,isX)
 
         isX = !isX
+        board.isClickable = !isX
 
         status.textContent = TURN.replace('%%', isX ? 'X' : 'O')
 
@@ -88,6 +91,7 @@ const startGame = () => {
 
         if (isX && !b.gameOver) {
             r = bestMove(b, levelNum[level])
+            board.isClickable = true
             squareDivs[r].click()
         }
 
@@ -126,6 +130,7 @@ const startGame = () => {
 
     if (isX) {
         r = bestMove(b, levelNum[level])
+        board.isClickable = true
         squareDivs[r].click()
     }
 }
