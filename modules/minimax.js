@@ -145,7 +145,7 @@ const bestMove = (game, level = 'hard') => {
         if (testForWin([...opp.slice(0,i),1,...opp.slice(i + 1)])) closeLoses = 0.5
 
         let score = minimax({xState: [...curr.slice(0,i),1, ...curr.slice(i + 1)], oState: opp}, false, levels[level]) + closeLoses
-
+        closeLoses = 0
 
         if (score > bestScore) {
             bestScore = score
@@ -156,8 +156,6 @@ const bestMove = (game, level = 'hard') => {
         }
 
     }
-    firstPass = false
-
     // picks a random (but equal) move
     return nextMoves[Math.floor(Math.random() * nextMoves.length)]
 }
