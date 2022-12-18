@@ -3,6 +3,7 @@ import { bestMove } from './minimax.js'
 import getLevel from './get-level.js'
 
 const board = document.querySelector('#board')
+const levelDisplay = document.querySelector('#level')
 const status = document.querySelector('#status')
 const playBtn = document.querySelector('#play')
 const xScore = document.querySelector('.score .x-score')
@@ -20,13 +21,15 @@ const score = {
     o: 0
 }
 
-const level = getLevel()
-
 const levelNum = [
     'easy',
     'medium',
     'hard'
 ]
+
+const level = levelNum[getLevel()]
+
+levelDisplay.innerText = (`LEVEL: ${level.toUpperCase()}`)
 
 const winCombos = [
     '0b111000000',
@@ -90,7 +93,7 @@ const startGame = () => {
         const isWinLine = testForWin(b.xState, true,b) || testForWin(b.oState, false,b)
 
         if (isX && !b.gameOver) {
-            r = bestMove(b, levelNum[level])
+            r = bestMove(b, level)
             board.isClickable = true
             squareDivs[r].click()
         }
@@ -129,7 +132,7 @@ const startGame = () => {
     board.append(fragment)
 
     if (isX) {
-        r = bestMove(b, levelNum[level])
+        r = bestMove(b, level)
         board.isClickable = true
         squareDivs[r].click()
     }

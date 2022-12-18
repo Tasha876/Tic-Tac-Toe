@@ -295,13 +295,23 @@ header {
     background-color: var(--score-bg-color);
     color: var(--score-color);
     border-radius: 0 0 1rem 0;
+    flex: 1;
 }
+
+#level {
+    color: var(--play-bg-color-active);
+    margin: auto;
+    flex: 100;
+    text-align: center;
+}
+
 
 label.switch {
     position: relative;
     height: 1.5em;
-    width: 3em;
-    margin: 0.5em 0.5em auto auto;
+    min-width: 3em;
+    margin: 0.5em;
+    flex: 1;
     background-color: var(--switch-color);
     border-radius: 0.75em;
 }
