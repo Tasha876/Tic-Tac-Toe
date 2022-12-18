@@ -1,6 +1,7 @@
 import Board from './board.js'
 import { bestMove } from './minimax.js'
 import getLevel from './get-level.js'
+import socketGet from './client-socket.js'
 
 const board = document.querySelector('#board')
 const status = document.querySelector('#status')
@@ -218,5 +219,7 @@ body.onkeyup = (e) => {
         playBtn.click()
     }
 }
+
+// socketGet()
 
 startGame()
