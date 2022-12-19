@@ -66,6 +66,7 @@ body {
 }
 
 [color-scheme="light"] {
+    --switch-bg-color: white;
     --x-color: hsl(159, 64%, 87%);
     --o-color: hsl(197, 61%, 91%);
     --x-color-faded: hsl(159, 64%, 93%);
@@ -91,6 +92,7 @@ body {
 }
 
 [color-scheme="dark"] {
+    --switch-bg-color: black;
     --bg-color: #333;
     --x-color: hsl(170, 61%, 27%);
     --o-color: hsl(203, 98%, 31%);
@@ -299,18 +301,22 @@ header {
 }
 
 #level {
-    color: var(--play-bg-color-active);
     margin: auto;
     flex: 100;
     text-align: center;
+}
+
+#level a {
+    color: var(--play-bg-color-active);
+    text-decoration: none;
 }
 
 
 label.switch {
     position: relative;
     height: 1.5em;
-    max-width: 3.5em;
-    min-width: 3.5em;
+    max-width: 3em;
+    min-width: 3em;
     margin: 0.5em;
     flex: 1;
     background-color: var(--switch-color);
@@ -331,7 +337,7 @@ span.slider {
     bottom: 0.2em;
     left: 0.2em;
     width: 1.3em;
-    background-color: white;
+    background-color: var(--switch-bg-color);
     border-radius: 0.63em;
     display: flex;
 }

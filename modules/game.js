@@ -29,7 +29,15 @@ const levelNum = [
 
 const level = levelNum[getLevel()]
 
-levelDisplay.innerText = (`LEVEL: ${level.toUpperCase()}`)
+const levelDisplayAnchor = document.createElement('a')
+
+levelDisplayAnchor.href='./'
+
+levelDisplayAnchor.innerText = (`LEVEL: ${level.toUpperCase()}`)
+
+levelDisplay.append(levelDisplayAnchor)
+
+levelDisplay.href = 'l'
 
 const winCombos = [
     '0b111000000',
