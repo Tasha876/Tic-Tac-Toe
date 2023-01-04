@@ -1,20 +1,17 @@
 {  
-    "routes": [
+    "cleanUrls": true,
+    "redirects": [
         {
-            "src": "/",
-            "dest": "./index.html"
+            "source": "/",
+            "destination": "./index.html"
         },
         {
-            "src": "/game[*]",
-            "dest": "./game.html"
+            "source": "/game?(\\?level=*)",
+            "destination": "/game.html"
         },
         {
-            "src": "/api",
-            "methods": [
-                "POST",
-                "GET"
-            ],
-            "dest": "./api/serverless.js"
+            "source": "/api",
+            "destination": "/api/serverless.js"
         }
     ]
 }
