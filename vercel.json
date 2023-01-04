@@ -1,11 +1,12 @@
 {  
+    "nonull": false,
     "redirects": [
         {
             "source": "/",
             "destination": "./index.html"
         },
         {
-            "source": "/game?(\\?level=*)",
+            "source": "/game?(\\?level=[0-2])",
             "destination": "/game.html"
         },
         {
