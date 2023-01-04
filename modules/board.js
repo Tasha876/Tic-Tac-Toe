@@ -17,7 +17,6 @@ class Square {
         s.setMark = square.setMark
         return s
     }
-
 }
 
 class Board {
@@ -55,8 +54,6 @@ class Board {
     }
 
 }
-
-// console.log(clone({}, 'Board'))
 
 export {
     Board
