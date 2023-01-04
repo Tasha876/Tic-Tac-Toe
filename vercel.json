@@ -1,12 +1,9 @@
 {  
+    "cleanUrls": true,
     "redirects": [
         {
             "source": "/",
             "destination": "/index.html"
-        },
-        {
-            "source": "/game?(.level=[0-2])",
-            "destination": "/game.html"
         },
         {
             "source": "/api",
