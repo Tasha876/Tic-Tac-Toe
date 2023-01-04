@@ -4,4 +4,5 @@ export default ()=> {
     const params = new URLSearchParams(query)
 
     return params.get('level')
+    
 }

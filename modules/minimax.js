@@ -1,5 +1,4 @@
 const getScore = (board, depth) => {
-    // console.log(depth)
     if (testForWin(board.xState) === null && testForWin(board.oState) === null) return null
     board.gameOver = true
     if (testForWin(board.xState)) return  1 + depth

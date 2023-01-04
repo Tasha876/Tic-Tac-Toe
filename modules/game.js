@@ -1,44 +1,13 @@
-import Board from './board.js'
-import { bestMove } from './minimax.js'
-import getLevel from './get-level.js'
-import socketGet from './client-socket.js'
+import { Board } from './board.js'
 
-const board = document.querySelector('#board')
-const levelDisplay = document.querySelector('#level')
-const status = document.querySelector('#status')
 const playBtn = document.querySelector('#play')
 const xScore = document.querySelector('.score .x-score')
 const oScore = document.querySelector('.score .o-score')
 const body = document.body
-
-const DRAW = 'it\'s a draw :('
-const WIN = '%% won!'
-const TURN = '%%\'s turn'
-
-const squareDivs = Array(9)
-
-const score = {
-    x: 0,
-    o: 0
-}
-
-const levelNum = [
-    'easy',
-    'medium',
-    'hard'
-]
-
-const level = levelNum[getLevel()]
-
-const levelDisplayAnchor = document.createElement('a')
-
-levelDisplayAnchor.href='./'
-
-levelDisplayAnchor.innerText = (`LEVEL: ${level.toUpperCase()}`)
-
-levelDisplay.append(levelDisplayAnchor)
-
-levelDisplay.href = 'l'
+const board = document.querySelector('#board')
+const status = document.querySelector('#status')
+const levelDisplay = document.querySelector('#level')
+const squareDivs2 = document.querySelectorAll('#board > div')
 
 const winCombos = [
     '0b111000000',
@@ -51,99 +20,36 @@ const winCombos = [
     '0b001010100'
 ]
 
+const DRAW = 'it\'s a draw :('
+const WIN = '%% won!'
+const TURN = '%%\'s turn'
+
+const squareDivs = Array(9)
+
+const score = {
+    x: 0,
+    o: 0
+}
+
 let isXFirst = !!Math.round(Math.random())
 
-let r = -1
 
-const startGame = () => {
+const calculateWin = (b) => {
 
-    const b = new Board
+    status.textContent = TURN.replace('%%', b.isX ? 'X' : 'O')
 
-    b.gameOver = false
+    const isWinLine = testForWin(true,b) || testForWin(false,b)
 
-    board.innerHTML = ''
-    board.classList.remove('finishedBoard')
-    isXFirst = !isXFirst
-    let isX = isXFirst
-
-    board.isClickable = !isX
-
-    status.textContent = (isX ? 'X\'s' : 'O\'s') + ' turn'
-
-    const fragment = document.createDocumentFragment()
-
-    for (let i=0; i < squareDivs.length; i++) {
-        squareDivs[i] = document.createElement('div')
-        squareDivs[i].setAttribute('data-index',i)
+    if (isWinLine) {
+        isWinLine.forEach(i=>{
+            squareDivs[i].classList.add('winSquare')
+        })
+        drawLine(squareDivs[isWinLine[0]],squareDivs[isWinLine[2]])
     }
 
-    board.onclick = (e) => {
-        if (e.currentTarget === e.target || !board.isClickable) return
-
-        const squareDiv = e.target
-        const index = squareDiv.getAttribute('data-index')
-        const square = b.squares[index]
-
-        if (square.mark || b.gameOver) return
-        
-        squareDiv.classList.remove(isX ? 'O' : 'X')
-        squareDiv.classList.add(isX ? 'X' : 'O')
-        square.setMark(isX)
-        squareDiv.innerText = square.mark
-        squareDiv.classList.add('selected')
-
-        b.changeState(index,isX)
-
-        isX = !isX
-        board.isClickable = !isX
-
-        status.textContent = TURN.replace('%%', isX ? 'X' : 'O')
-
-        const isWinLine = testForWin(b.xState, true,b) || testForWin(b.oState, false,b)
-
-        if (isX && !b.gameOver) {
-            r = bestMove(b, level)
-            board.isClickable = true
-            squareDivs[r].click()
-        }
-
-        if (isWinLine) {
-            isWinLine.forEach(i=>{
-                squareDivs[i].classList.add('winSquare')
-            })
-            drawLine(squareDivs[isWinLine[0]],squareDivs[isWinLine[2]])
-        }
-        if (b.gameOver) {
-            board.classList.add('finishedBoard')
-            playBtn.classList.add('animate')
-        }
-    }
-
-    board.onmouseover = (e) => {
-        if (e.currentTarget === e.target) return
-        const squareDiv = e.target
-
-        if (b.gameOver || squareDiv.classList.contains('selected')) return
-        squareDiv.classList.remove(isX ? 'O' : 'X')
-        squareDiv.classList.add(isX ? 'X' : 'O')
-    
-    }
-
-    board.onmouseout = (e) => {
-        if (e.currentTarget === e.target) return
-        const squareDiv = e.target
-
-        if (b.gameOver || squareDiv.classList.contains('selected')) return
-        squareDiv.classList.remove('X','O')
-    }
-    
-    fragment.append(...squareDivs)
-    board.append(fragment)
-
-    if (isX) {
-        r = bestMove(b, level)
-        board.isClickable = true
-        squareDivs[r].click()
+    if (b.gameOver) {
+        board.classList.add('finishedBoard')
+        playBtn.classList.add('animate')
     }
 }
 
@@ -194,9 +100,9 @@ const updateScore = (isX) => {
     }
 }
 
-const testForWin = (state,isX,b) => {
+const testForWin = (isX,b) => {
 
-    const bi = `0b${state.join('')}`
+    const bi = isX ? `0b${b.xState.join('')}` :  `0b${b.oState.join('')}`
     // decided to use binary for this, figured its faster than using a loop
     // I got the idea from here: https://stackoverflow.com/a/33456912
     for (let combo of winCombos) {
@@ -217,11 +123,6 @@ const testForWin = (state,isX,b) => {
 
 }
 
-playBtn.onclick = () => {
-    playBtn.classList.remove('animate')
-    startGame()
-}
-
 body.onkeyup = (e) => {
     if (e.key.match(/[1-9]/)) {
         squareDivs[e.key - 1].click()
@@ -231,6 +132,66 @@ body.onkeyup = (e) => {
     }
 }
 
-// socketGet()
+const newBoard = new Board
 
-startGame()
+const startGame = (playSquare=()=>{}, b = newBoard) => {
+
+    b.gameOver = false
+
+    board.innerHTML = ''
+    board.classList.remove('finishedBoard')
+    isXFirst = !isXFirst
+    b.isX = isXFirst
+
+    board.isClickable = !b.isX
+
+    status.textContent = (b.isX ? 'X\'s' : 'O\'s') + ' turn'
+
+    const fragment = document.createDocumentFragment()
+
+    for (let i=0; i < squareDivs.length; i++) {
+        squareDivs[i] = document.createElement('div')
+        squareDivs[i].setAttribute('data-index',i)
+    }
+
+
+    board.onmouseover = (e) => {
+        if (e.currentTarget === e.target) return
+        const squareDiv = e.target
+
+        if (b.gameOver || squareDiv.classList.contains('selected')) return
+        squareDiv.classList.remove(b.isX ? 'O' : 'X')
+        squareDiv.classList.add(b.isX ? 'X' : 'O')
+    
+    }
+
+    board.onmouseout = (e) => {
+        if (e.currentTarget === e.target) return
+        const squareDiv = e.target
+
+        if (b.gameOver || squareDiv.classList.contains('selected')) return
+        squareDiv.classList.remove('X','O')
+    }
+    
+    fragment.append(...squareDivs)
+    board.append(fragment)
+
+    // // first move is computer
+    if (b.isX) playSquare(b)
+
+    // // on human play
+    board.onclick = (e) => playSquare(undefined,e)
+    
+}
+
+export {
+    status,
+    board,
+    squareDivs,
+    calculateWin,
+    levelDisplay,
+    startGame,
+    playBtn,
+    squareDivs2,
+    newBoard
+}
