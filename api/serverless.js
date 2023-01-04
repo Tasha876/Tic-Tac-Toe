@@ -1,3 +1,5 @@
+let data = {}
+
 export default (req, res) => {
     if(req.method === 'GET' && req.url == '/api') {
         res.writeHead(200, {
@@ -33,7 +35,6 @@ export default (req, res) => {
     } 
 
     else if (req.url === '/api') {
-        console.log('get')
         const makeRequest = ()=> {
             console.log('get2')
             return new Promise((resolve, reject)=>{
