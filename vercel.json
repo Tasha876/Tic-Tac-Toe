@@ -5,7 +5,7 @@
             "dest": "./index.html"
         },
         {
-            "src": "/game",
+            "src": "/game[*]",
             "dest": "./game.html"
         },
         {
@@ -14,7 +14,7 @@
                 "POST",
                 "GET"
             ],
-            "dest": "./api"
+            "dest": "./api/serverless.js"
         }
     ]
 }
