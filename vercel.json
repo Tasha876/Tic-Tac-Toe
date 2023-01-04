@@ -6,7 +6,7 @@
             "destination": "./index.html"
         },
         {
-            "source": "/game?(\\?level=[0-2])",
+            "source": "/game?(.level=[0-2])",
             "destination": "/game.html"
         },
         {
