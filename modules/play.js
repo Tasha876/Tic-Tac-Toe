@@ -9,8 +9,6 @@ navigator.serviceWorker.onmessage = async (e) => {
     methods.setGameOver = new Function(methods.setGameOver)
     Object.assign(b, methods)
 
-    console.log(b)
-
     playSquareOpp(b)
 
     playBtn.onclick = () => {

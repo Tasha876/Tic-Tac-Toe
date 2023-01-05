@@ -43,7 +43,6 @@ self.addEventListener('fetch', async (e)=>{
         const client = clients[i]
         if (client.id === selfId) continue
         const board = await bitArrayToJSON(e.request.body)
-        console.log(board, clients, client)
         client.postMessage({
                 turn: board.isX
         })

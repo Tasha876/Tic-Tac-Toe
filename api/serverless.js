@@ -1,16 +1,9 @@
-let data = {}
+import fs from 'fs'
+import path from 'path'
 
-export default (req, res) => {
-    if(req.method === 'GET' && req.url == '/api') {
-        res.writeHead(200, {
-            'Content-Type': 'application/json',
-            'Transfer-Encoding': 'chunked',
-            'enable-underscores-in-headers': "true",
+export default async function handler (req, res) {
 
-        })
-        res.end(JSON.stringify(data))
-    }
-    else if (req.url == '/api' && req.method === 'POST') {
+    if (req.method === 'POST') {
             let body = ''
             req.on('error',(err)=> {
                     console.log('error',err)
@@ -22,15 +15,24 @@ export default (req, res) => {
             })
             
             req.on('end',()=>{
-                    res.writeHead(200, { 
-                        'Content-Type': 'application/json',
-                        'Transfer-Encoding': 'chunked',
-                        'enable-underscores-in-headers': "true",
-                        'Connection': 'keep-alive',
+                res.writeHead(200, { 
+                    'Content-Type': 'application/json',
+                    'Transfer-Encoding': 'chunked',
                 })
-                data = JSON.parse(body)
-                res.end(JSON.stringify({status: 'success'}))
 
+            fs.writeFileSync(path.join(__dirname,'../tmp/data.json'), body)
+
+            res.end(JSON.stringify({status: 'success'}))
             })
     } 
+    else if(req.method === 'GET') {
+        res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Transfer-Encoding': 'chunked',
+        })
+
+        let data = JSON.parse(fs.readFileSync(path.join(__dirname,'../tmp/data.json')).toString())     
+
+        res.end(JSON.stringify(data))
+    }
 }

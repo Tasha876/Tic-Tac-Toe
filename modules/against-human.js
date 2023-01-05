@@ -44,29 +44,25 @@ const getBoard = async () => {
     .then(newboard=>{
         return newboard
     })
-    console.log(data)
     return data
 }
 
 const playSquareOpp = (b) => {
-
-    console.log('here4',b)
 
     if (b.gameOver) return
 
     const squareDivs = board.querySelectorAll('div')
 
     b.squares.forEach((square,i)=> {
-        console.log(board.querySelectorAll('div'))
         const squareDiv = squareDivs[i]
         if (square.mark === 'x') {
             squareDiv.classList.add('selected','X')
-            squareDiv.innerText = 'X'
+            squareDiv.innerText = 'x'
             b.changeState(i,b.isX)
         }
         else if (square.mark === 'o') {
             squareDiv.classList.add('selected','O')
-            squareDiv.innerText = 'O'
+            squareDiv.innerText = 'o'
             b.changeState(i,b.isX)
         }
             calculateWin(b)
@@ -78,8 +74,6 @@ const playSquareOpp = (b) => {
 }
 
 const playSquare = (b = newBoard,e = {}) => {
-
-    console.log(b)
 
         if (e.currentTarget === e.target || b.gameOver) return
 
@@ -94,8 +88,6 @@ const playSquare = (b = newBoard,e = {}) => {
         square.setMark(b.isX)
         squareDiv.innerText = square.mark
         squareDiv.classList.add('selected')
-
-        console.log(b)
     
         b.changeState(index,b.isX)
     
